@@ -20,9 +20,6 @@ android {
             storePassword "123456"
             keyPassword "123456"
         }
-        debug {
-            storeFile file("./keystore/debug.keystore")
-        }
     }
 
     defaultConfig {
@@ -53,9 +50,9 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         debug {
-            debuggable true
             minifyEnabled false
-            signingConfig signingConfigs.debug
+            shrinkResources false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
     dexOptions {
@@ -99,7 +96,7 @@ def bakPath = file("${buildDir}/bakApk/")
  * add apk from the build/bakApk
  */
 ext {
-    def apkname="app-release-1031-14-46-16"
+    def apkname="app-debug-1031-19-46-21"
     //是否打开tinker的功能
     tinkerEnabled = true
     //old apk地址
@@ -225,6 +222,17 @@ if (buildWithTinker()) {
 
             //是否开启加固
             isProtectedApp = false
+
+            /**
+             * optional, default 'false'
+             * Whether tinker should support component hotplug (add new component dynamically).
+             * If this attribute is true, the component added in new apk will be available after
+             * patch is successfully loaded. Otherwise an error would be announced when generating patch
+             * on compile-time.
+             *
+             * <b>Notice that currently this feature is incubating and only support NON-EXPORTED Activity</b>
+             */
+            supportHotplugComponent = true
         }
 
         dex {

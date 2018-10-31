@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
         }
         sb.append(String.format("[BaseBuildInfo Message] %s \n", BaseBuildInfo.TEST_MESSAGE));
 
-        tv.setText(sb.toString());
+        tv.setText(channel.toString());
     }
 
     public void onTinkerClick(View view) {
