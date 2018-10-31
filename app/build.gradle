@@ -96,7 +96,7 @@ def bakPath = file("${buildDir}/bakApk/")
  * add apk from the build/bakApk
  */
 ext {
-    def apkname="app-debug-1031-23-25-52"
+    def apkname="app-debug-1031-23-46-42"
     //是否打开tinker的功能
     tinkerEnabled = true
     //old apk地址
