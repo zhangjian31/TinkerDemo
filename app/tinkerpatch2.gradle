@@ -1,77 +1,3 @@
-apply plugin: 'com.android.application'
-//apply from: 'tinkerpatch2.gradle'
-android {
-    compileSdkVersion 28
-    //recommend Tinker相关配置
-    dexOptions {
-        jumboMode = true
-    }
-//签名信息配置
-    signingConfigs {
-        release {
-            storeFile file("./keystore/wildmatinker.jks")
-            keyAlias "wildmatinker"
-            storePassword "123456"
-            keyPassword "123456"
-        }
-        debug {
-            storeFile file("./keystore/debug.keystore")
-        }
-    }
-
-    defaultConfig {
-        applicationId "com.example.jery.tinkerdemo"
-        minSdkVersion 16
-        targetSdkVersion 28
-        versionCode 1
-        versionName "1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        multiDexEnabled true
-        javaCompileOptions {
-            annotationProcessorOptions {
-                includeCompileClasspath true
-            }
-        }
-
-        buildConfigField "String", "MESSAGE", "\"I am the base apk\""
-        buildConfigField "String", "TINKER_ID", "\"${getTinkerIdValue()}\""
-        buildConfigField "String", "PLATFORM", "\"all\""
-    }
-
-    buildTypes {
-        release {
-            minifyEnabled true
-            signingConfig signingConfigs.release
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-        debug {
-            debuggable true
-            minifyEnabled false
-            signingConfig signingConfigs.debug
-        }
-    }
-    dexOptions {
-        javaMaxHeapSize "4g"
-    }
-}
-
-dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'com.android.support:appcompat-v7:28.+'
-    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.1'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
-
-    implementation 'com.android.support:multidex:1.0.1'
-    implementation("com.tencent.tinker:tinker-android-lib:1.9.1") { changing = true }
-    annotationProcessor("com.tencent.tinker:tinker-android-anno:1.9.1") { changing = true }
-    compileOnly("com.tencent.tinker:tinker-android-anno:1.9.1") { changing = true }
-
-}
-
-
-
 def bakPath = file("${buildDir}/bakApk/")
 
 /**
@@ -80,7 +6,7 @@ def bakPath = file("${buildDir}/bakApk/")
  * add apk from the build/bakApk
  */
 ext {
-    def apkname="app-release-1031-14-46-16"
+    def apkname="app-debug-1031-10-43-26"
     //是否打开tinker的功能
     tinkerEnabled = true
     //old apk地址
@@ -336,7 +262,6 @@ if (buildWithTinker()) {
         def taskName = variant.name
 
         tasks.all {
-
             if ("assemble${taskName.capitalize()}".equalsIgnoreCase(it.name)) {
 
                 it.doLast {
@@ -345,13 +270,10 @@ if (buildWithTinker()) {
                         def newFileNamePrefix = hasFlavors ? "${fileNamePrefix}" : "${fileNamePrefix}-${date}"
 
                         def destPath = hasFlavors ? file("${bakPath}/${project.name}-${date}/${variant.flavorName}") : bakPath
-                        variant.outputs.all{
-                            output ->
-                                from outputFile
-                                into destPath
-                                rename { String fileName ->
-                                    fileName.replace("${fileNamePrefix}.apk", "${newFileNamePrefix}.apk")
-                                }
+                        from variant.outputs.outputFile
+                        into destPath
+                        rename { String fileName ->
+                            fileName.replace("${fileNamePrefix}.apk", "${newFileNamePrefix}.apk")
                         }
 
                         from "${buildDir}/outputs/mapping/${variant.dirName}/mapping.txt"

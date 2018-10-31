@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.jery.tinkerdemo.tinker.Utils;
 import com.tencent.tinker.lib.tinker.TinkerInstaller;
 
 import java.io.File;
@@ -26,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onTinkerClick(View view) {
-        String path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/patch_signed_7zip.apk";
+        String path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/patch_signed_7zip";
         File file = new File(path);
         if (file.exists()) {
             Toast.makeText(this, "补丁已经存在", Toast.LENGTH_SHORT).show();
@@ -57,5 +58,19 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+
+    //Tinker相关配置
+    protected void onResume() {
+        super.onResume();
+        Utils.setBackground(false);
+
+    }
+
+    //Tinker相关配置
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Utils.setBackground(true);
+    }
 
 }
