@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showChannel() {
-        String channel = WalleChannelReader.getChannel(this.getApplicationContext());
+//        String channel = WalleChannelReader.getChannel(this.getApplicationContext());
         final StringBuilder sb = new StringBuilder();
         Tinker tinker = Tinker.with(getApplicationContext());
         if (tinker.isTinkerLoaded()) {
@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
         }
         sb.append(String.format("[BaseBuildInfo Message] %s \n", BaseBuildInfo.TEST_MESSAGE));
 
-        tv.setText(channel.toString());
+        tv.setText(sb.toString());
     }
 
     public void onTinkerClick(View view) {

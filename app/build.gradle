@@ -40,7 +40,7 @@ android {
         buildConfigField "String", "PLATFORM", "\"all\""
 
         //tinker分包规则
-//        multiDexKeepProguard file("./tinker_multidexkeep.pro")
+        multiDexKeepProguard file("./keep_in_main_dex.pro")
     }
 
     buildTypes {
@@ -96,7 +96,7 @@ def bakPath = file("${buildDir}/bakApk/")
  * add apk from the build/bakApk
  */
 ext {
-    def apkname="app-debug-1031-19-46-21"
+    def apkname="app-debug-1031-23-25-52"
     //是否打开tinker的功能
     tinkerEnabled = true
     //old apk地址
@@ -232,7 +232,7 @@ if (buildWithTinker()) {
              *
              * <b>Notice that currently this feature is incubating and only support NON-EXPORTED Activity</b>
              */
-            supportHotplugComponent = true
+            supportHotplugComponent = false
         }
 
         dex {
