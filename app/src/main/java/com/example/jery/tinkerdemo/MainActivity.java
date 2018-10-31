@@ -10,9 +10,14 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.jery.tinkerdemo.tinker.BaseBuildInfo;
+import com.example.jery.tinkerdemo.tinker.BuildInfo;
 import com.example.jery.tinkerdemo.tinker.Utils;
 import com.meituan.android.walle.WalleChannelReader;
+import com.tencent.tinker.lib.tinker.Tinker;
 import com.tencent.tinker.lib.tinker.TinkerInstaller;
+import com.tencent.tinker.loader.shareutil.ShareConstants;
+import com.tencent.tinker.loader.shareutil.ShareTinkerInternals;
 
 import java.io.File;
 
@@ -25,12 +30,34 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         tv = findViewById(R.id.tv);
         checkPermision();
-//        showChannel();
+        showChannel();
     }
 
     private void showChannel() {
         String channel = WalleChannelReader.getChannel(this.getApplicationContext());
-        tv.setText(TextUtils.isEmpty(channel) ? "" : channel);
+        final StringBuilder sb = new StringBuilder();
+        Tinker tinker = Tinker.with(getApplicationContext());
+        if (tinker.isTinkerLoaded()) {
+            sb.append(String.format("[patch is loaded] \n"));
+            sb.append(String.format("[buildConfig TINKER_ID] %s \n", BuildInfo.TINKER_ID));
+            sb.append(String.format("[buildConfig BASE_TINKER_ID] %s \n", BaseBuildInfo.BASE_TINKER_ID));
+
+            sb.append(String.format("[buildConfig MESSSAGE] %s \n", BuildInfo.MESSAGE));
+            sb.append(String.format("[TINKER_ID] %s \n", tinker.getTinkerLoadResultIfPresent().getPackageConfigByName(ShareConstants.TINKER_ID)));
+            sb.append(String.format("[packageConfig patchMessage] %s \n", tinker.getTinkerLoadResultIfPresent().getPackageConfigByName("patchMessage")));
+            sb.append(String.format("[TINKER_ID Rom Space] %d k \n", tinker.getTinkerRomSpace()));
+
+        } else {
+            sb.append(String.format("[patch is not loaded] \n"));
+            sb.append(String.format("[buildConfig TINKER_ID] %s \n", BuildInfo.TINKER_ID));
+            sb.append(String.format("[buildConfig BASE_TINKER_ID] %s \n", BaseBuildInfo.BASE_TINKER_ID));
+
+            sb.append(String.format("[buildConfig MESSSAGE] %s \n", BuildInfo.MESSAGE));
+            sb.append(String.format("[TINKER_ID] %s \n", ShareTinkerInternals.getManifestTinkerID(getApplicationContext())));
+        }
+        sb.append(String.format("[BaseBuildInfo Message] %s \n", BaseBuildInfo.TEST_MESSAGE));
+
+        tv.setText(sb.toString());
     }
 
     public void onTinkerClick(View view) {
@@ -42,6 +69,15 @@ public class MainActivity extends AppCompatActivity {
         } else {
             Toast.makeText(this, "补丁已经不存在", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    public void onClearTinkerClick(View view) {
+        Tinker.with(getApplicationContext()).cleanPatch();
+    }
+
+    public void onRestartClick(View view) {
+        ShareTinkerInternals.killAllOtherProcess(getApplicationContext());
+        android.os.Process.killProcess(android.os.Process.myPid());
     }
 
     @Override
@@ -79,5 +115,6 @@ public class MainActivity extends AppCompatActivity {
         super.onPause();
         Utils.setBackground(true);
     }
+
 
 }
