@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
 //apply from: 'tinkerpatch2.gradle'
+apply plugin: 'walle'
 android {
     compileSdkVersion 28
     //recommend Tinker相关配置
@@ -32,7 +33,6 @@ android {
                 includeCompileClasspath true
             }
         }
-
         buildConfigField "String", "MESSAGE", "\"I am the base apk\""
         buildConfigField "String", "TINKER_ID", "\"${getTinkerIdValue()}\""
         buildConfigField "String", "PLATFORM", "\"all\""
@@ -67,7 +67,18 @@ dependencies {
     implementation("com.tencent.tinker:tinker-android-lib:1.9.1") { changing = true }
     annotationProcessor("com.tencent.tinker:tinker-android-anno:1.9.1") { changing = true }
     compileOnly("com.tencent.tinker:tinker-android-anno:1.9.1") { changing = true }
+    implementation 'com.meituan.android.walle:library:1.1.6'
 
+}
+//打包 ./gradlew clean assembleReleaseChannels
+walle {
+    // 指定渠道包的输出路径
+    apkOutputFolder = new File("${project.buildDir}/outputs/channels");
+    // 定制渠道包的APK的文件名称
+//    apkFileNameFormat = '${appName}-${packageName}-${channel}-${buildType}-v${versionName}-${versionCode}-${buildTime}.apk';
+    apkFileNameFormat = '${appName}-${channel}-${buildType}-v${versionName}.apk'
+    // 渠道配置文件
+    channelFile = new File("${project.getProjectDir()}/channel")
 }
 
 
