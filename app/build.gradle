@@ -8,7 +8,6 @@ int configVersionCode = Integer.parseInt(properties.getProperty("versionCode"))
 
 android {
     compileSdkVersion 26
-    buildToolsVersion '26.0.2'
     //recommend Tinker相关配置
     dexOptions {
         jumboMode = true
@@ -63,7 +62,7 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'com.android.support:appcompat-v7:23.1.1'
+    implementation 'com.android.support:appcompat-v7:26.0.2'
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
@@ -97,7 +96,7 @@ def bakPath = file("${buildDir}/bakApk/")
  * add apk from the build/bakApk
  */
 ext {
-    def apkname="app-debug-1101-10-47-22"
+    def apkname="app-debug-1101-11-30-35"
     //是否打开tinker的功能
     tinkerEnabled = true
     //old apk地址
