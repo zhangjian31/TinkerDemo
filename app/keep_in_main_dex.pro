@@ -19,7 +19,7 @@
 }
 
 #your dex.loader patterns here
--keep class tinker.sample.android.app.BaseBuildInfo {
+-keep class com.example.jery.tinkerdemo.tinker.BaseBuildInfo {
     <init>(...);
 }
 

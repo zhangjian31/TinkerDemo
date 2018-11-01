@@ -7,7 +7,8 @@ String configVersionName = properties.getProperty("versionName")
 int configVersionCode = Integer.parseInt(properties.getProperty("versionCode"))
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 26
+    buildToolsVersion '26.0.2'
     //recommend Tinker相关配置
     dexOptions {
         jumboMode = true
@@ -25,7 +26,7 @@ android {
     defaultConfig {
         applicationId "com.example.jery.tinkerdemo"
         minSdkVersion 16
-        targetSdkVersion 28
+        targetSdkVersion 26
         versionCode configVersionCode
         versionName configVersionName
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -62,7 +63,7 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'com.android.support:appcompat-v7:28.+'
+    implementation 'com.android.support:appcompat-v7:23.1.1'
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
@@ -96,7 +97,7 @@ def bakPath = file("${buildDir}/bakApk/")
  * add apk from the build/bakApk
  */
 ext {
-    def apkname="app-debug-1031-23-46-42"
+    def apkname="app-debug-1101-10-47-22"
     //是否打开tinker的功能
     tinkerEnabled = true
     //old apk地址
@@ -263,7 +264,7 @@ if (buildWithTinker()) {
              */
             loader = [
                     //use sample, let BaseBuildInfo unchangeable with tinker
-                    "tinker.sample.android.app.BaseBuildInfo"
+                    "com.example.jery.tinkerdemo.tinker.BaseBuildInfo"
             ]
         }
 
